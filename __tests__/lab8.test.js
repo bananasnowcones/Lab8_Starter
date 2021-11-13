@@ -121,8 +121,9 @@ describe('Basic user flow for Website', () => {
     // TODO - Step 5
     // At this point the item 'cart' in localStorage should be 
     // '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]', check to make sure it is
-    const cart = await page.evaluate();
-    const cartcheck = cart.getItem('cart');
+    const cartcheck = await page.evaluate(() => {
+      return localStorage.getItem('cart');
+    });
 
     expect(cartcheck).toBe('[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]');
     
@@ -168,7 +169,10 @@ describe('Basic user flow for Website', () => {
 
       expect(ITvalue).toBe('Add to Cart');
     }
- 
+    const cartCount = await page.$('#cart-count');
+    const innerText = await cartCount.getProperty('innerText');
+
+    expect(innerText['_remoteObject'].value).toBe('0');
 
   }, 10000);
 
@@ -178,8 +182,9 @@ describe('Basic user flow for Website', () => {
     console.log('Checking the localStorage...');
     // TODO - Step 8
     // At this point the item 'cart' in localStorage should be '[]', check to make sure it is
-    const cart = await page.evaluate();
-    const cartcheck = cart.getItem('cart');
+    const cartcheck = await page.evaluate(() => {
+      return localStorage.getItem('cart');
+    });
 
     expect(cartcheck).toBe('[]');
   });
